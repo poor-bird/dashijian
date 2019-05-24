@@ -6,9 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>大事件-后台登录页</title>
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
@@ -29,8 +33,65 @@
             </form>
         </div>
 
-    </div> 
+    </div>
 
+<!-- 模态框 -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small
+        modal</button>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">提示信息</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
+
+<script>
+    $(function () {
+        // 清除form表单的默认事件
+        $(".login_form").submit(function (e) {
+            e.preventDefault();
+        })
+        // 登入的点击事件
+        $(".input_sub").click(function () {
+            let user_name = $(".input_txt").val().trim(); //获取用户名
+            let password = $(".input_pass").val().trim(); //获取用户密码
+            // 判断用户输入的值是否为空
+            if (user_name == "" || password == "") {
+                $(".modal-body").text("用户密码不能为空");
+                $(".modal").modal();
+                return ;
+            }
+            $.ajax({
+                url: " https://autumnfish.cn/big/admin/login",
+                type: "POST",
+                data: {
+                    user_name: user_name,
+                    password: password
+                },
+                success: function (backData) {
+                    // 当状态码为200的时候
+                    if (backData.code == 200) {
+                        $(".modal-body").text("欢迎回来！！！");
+                        $(".modal").modal();
+                    }else if(backData.code == 400){
+                        $("modal-body").text("用户名或密码错误");
+                        $(".modal").modal();
+                    }
+                }
+
+            })
+        })
+    })
+</script>
