@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
 
 </head>
 
@@ -24,38 +25,38 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">用户名称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control "  value="李思思">
+                        <input type="text" class="form-control username" name="username" value="李思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control"  value="思思">
+                        <input type="text" class="form-control nickname" name="nickname" value="思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control"  value="lisisi@126.com">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
-                    <div class="col-sm-10">
-                        <img src="images/2.jpg" alt="" class="user_pic">
-                        <input type="file" id="exampleInputFile">
+                        <input type="text" class="form-control email" name="email" value="lisisi@126.com">
                     </div>
                 </div>
 
                 <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
-                        <div class="col-sm-4">
-                            <input type="password" class="form-control"  value="12345678">
-                        </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
+                    <div class="col-sm-10">
+                        <img src="images/2.jpg" alt="" class="user_pic">
+                        <input type="file" id="exampleInputFile" name="user_pic">
                     </div>
-               
-    
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
+                    <div class="col-sm-4">
+                        <input type="password" class="form-control password" name="password" value="12345678">
+                    </div>
+                </div>
+
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success">修改</button>
@@ -64,11 +65,80 @@
             </form>
         </div>
     </div>
+    <!-- 拟态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body">
+                    <p>已提交</p>
+                </div>
+                
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <!-- 修改信息 -->
     <script>
-        $(function(){
-            
+        $(function () {
+            // let = {
+            //     username: "xo",
+            //     nickname: "你猜",
+            //     password: 123456,
+            //     u
+            // }
+            // 获取数据
+            $.ajax({
+                url: "https://autumnfish.cn/big/admin/userinfo_get",
+                type: "get",
+                success: function (backData) {
+                    console.log(backData)
+                    for (const key in backData) {
+                        if (key != "user_pic") {
+                            $(".input" + key).val(backData.data[key]);
+                        } else {
+                            $(".user_pic").attr("src", backData.data[key]);
+                        }
+                    }
+                }
+            })
+
+            // chang事件绑定
+            $("#exampleInputFile").change(function () {
+                console.log(this.files[0]);
+                // 获取图片的url
+                let url = URL.createObjectURL(this.files[0]);
+                $(this).prev("img").attr("src", url);
+            })
+            // 保存按钮的点击事件
+            $(".btn-success").click(function (e) {
+                // 取消默认事件
+                e.preventDefault();
+                // 使用formData发送数据
+                let formdata = new FormData($(".article_form")[0]);
+               
+                $.ajax({
+                    url: "https://autumnfish.cn/big/admin/userinfo_edit",
+                    type: "post",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    success: function (backData) {
+                        console.log(formdata)
+                        if (backData.code == 200) {
+                            $(".modal").modal();
+                            setTimeout(function(){
+                                window.location.reload();
+                            },1000)
+                        }
+                    }
+                })
+            })
+
         })
     </script>
 </body>
