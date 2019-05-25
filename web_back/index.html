@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -18,7 +19,7 @@
         <a href="#" class="logo"><img src="images/logo02.png" alt="logo"></a>
         <div class="user_info">
             <img src="images/2.jpg" alt="person">
-            <span>欢迎&nbsp;&nbsp;李思思</span>
+            <span>欢迎&nbsp;&nbsp;<i>李思思</i></span>
             <b>管理员</b>
         </div>
         <div class="menu">
@@ -53,7 +54,23 @@
     </div>
 
 
-
+    <div class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                  <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">再看看</button>
+                  <button type="button" class="btn btn-primary btn-logout">我不想看了</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
     <script>
         var $level01 = $('.level01');
         var $subli = $('.level02 li')
@@ -101,6 +118,29 @@
               $('.level02').children().eq(n).addClass('active').siblings().removeClass('active');
            }
         }
+
+    </script>
+
+    <!-- 用户登出 -->
+    <script>
+        $(".user_center_link a:last").click(function(){
+            // 提醒用户是否真的退出页面
+            $(".modal").modal()
+        })
+        // 点击确认退出
+        $(".btn-logout").click(function(){
+            $.ajax({
+                url: "https://autumnfish.cn/big/admin/logout",
+                type: "post",
+                success: function(backData){
+                    // 当状态码为200的时候
+                    if (backData.code === 200) {
+                        // 登出成功
+                        window.location.href = "./login.html"
+                    }
+                }
+            })
+        })
 
     </script>
 
