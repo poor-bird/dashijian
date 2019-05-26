@@ -96,7 +96,7 @@
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="control-label">分类别名:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <input type="text" class="form-control" id="recipient-slug">
                         </div>
                     </form>
                 </div>
@@ -140,25 +140,65 @@
             <td class="text-center">
                 <a id="{{$value.id}}" href='javascript:editTr({"id":"1","slug":"uncategorized","name":"未分类"});'
                     class="btn btn-info btn-xs">编辑</a>
-                <a id="{{$value.id}}" href="javascript:deleteTr( 1 );" class="btn btn-danger btn-xs">删除</a>
+                <a id="{{$value.id}}" href="javascript:deleteTr({{$value.id}});" class="btn btn-danger btn-xs">删除</a>
             </td>
+            <!--  -->
         </tr>
         {{/each}}
     </script>
     <!-- 获取数据 -->
     <script>
-        $(function () {
-            // 通过ajax获取数据
-            $.ajax({
-                url: "https://autumnfish.cn/big/admin/category_search",
-                type: "get",
-                success: function (backData) {
-                    console.log(backData)
-                    let html = template("search", backData);
-                    $("table tbody").html(html);
-                }
+        // 通过ajax获取数据
+        // $(function () {
+            function getData() {
+                $.ajax({
+                    url: "https://autumnfish.cn/big/admin/category_search",
+                    type: "get",
+                    success: function (backData) {
+                        let html = template("search", backData);
+                        $("table tbody").html(html);
+                    }
+                })
+            }
+            getData();
+
+            // 增加数据
+            $("a.btn-success").click(function () {
+                $("#model_add").click(function () {
+                    let name = $("#recipient-name").val(),
+                        slug = $("#recipient-slug").val();
+                    $.ajax({
+                        url: 'https://autumnfish.cn/big/admin/category_add',
+                        type: "post",
+                        data: {
+                            name: name,
+                            slug: slug
+                        },
+                        success: function (backData) {
+                            let html = template("search", backData);
+                            $("table tbody").html(html);
+                            getData();
+                        }
+                    })
+                })
+
             })
-        })
+
+            function deleteTr(oid) {
+                // let ele =  $(this).index();
+                // let id = $(this).attr("id");
+                $.ajax({
+                    url: "https://autumnfish.cn/big/admin/category_delete",
+                    data: {
+                        id: oid
+                    },
+                    method: "post",
+                    success: function (backData) {
+                        getData();
+                    }
+                })
+            }
+        // })
     </script>
 </body>
 
