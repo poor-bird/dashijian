@@ -223,7 +223,17 @@
                         }
                     })
                 }else{
+                    // console.log( $("form").serialize())
                     
+                    $.ajax({
+                        url: "http://localhost:8000/admin/category_add",
+                        type: "post",
+                        data: $("form").serialize(),
+                        success: function(backData){
+                            console.log( $("form").serialize())
+                            getData();
+                        }
+                    })
                 }
             })
             // 点击新增分类按钮后
