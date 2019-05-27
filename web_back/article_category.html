@@ -152,7 +152,7 @@
         // $(function () {
             function getData() {
                 $.ajax({
-                    url: "https://autumnfish.cn/big/admin/category_search",
+                    url: "http://localhost:8000/admin/category_search",
                     type: "get",
                     success: function (backData) {
                         let html = template("search", backData);
@@ -168,7 +168,7 @@
                     let name = $("#recipient-name").val(),
                         slug = $("#recipient-slug").val();
                     $.ajax({
-                        url: 'https://autumnfish.cn/big/admin/category_add',
+                        url: 'http://localhost:8000/admin/category_add',
                         type: "post",
                         data: {
                             name: name,
@@ -188,7 +188,7 @@
                 // let ele =  $(this).index();
                 // let id = $(this).attr("id");
                 $.ajax({
-                    url: "https://autumnfish.cn/big/admin/category_delete",
+                    url: "http://localhost:8000/admin/category_delete",
                     data: {
                         id: oid
                     },
